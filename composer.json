@@ -1,0 +1,19 @@
+{
+    "name": "cybertiwari/solid",
+    "description": "Solid Principle example with php",
+    "type": "metapackage",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Router\\": "router/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Sunil Tiwari",
+            "email": "cybertiwari@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
