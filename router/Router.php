@@ -39,7 +39,8 @@ class Router
     {
       return '/';
     }
-    return $result;
+    $result = explode('?',$result);
+    return rtrim($result[0]);
   }
 
   private function invalidMethodHandler()

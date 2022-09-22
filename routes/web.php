@@ -1,71 +1,59 @@
 <?php
 
-use App\Assignment\Invoice;
 use App\Assignment\BlogPost;
-use App\Assignment\FuelPrice;
-use App\Assignment\PetrolCar;
-use App\Assignment\CreditNote;
 use App\Assignment\VideoPlayer;
-use App\Assignment\Model\Author;
 use App\Assignment\MailerService;
-use App\Assignment\AviVideoPlayer;
-use App\Assignment\CngCar;
-use App\Assignment\DatabaseLogger;
-use App\Assignment\DieselCar;
+use App\Assignment\Logger;
+use App\Assignment\OGGVideoPlayer;
+use App\Assignment\SubscriptionPrice;
+use App\Assignment\Database\Connection;
+use App\Assignment\Gold;
+use App\Assignment\Silver;
+use App\Assignment\Platinum;
 
-$router->get('/', function($request) {
-    return <<<HTML
-    <center>
-      <h1>Solid Principle</h1>
-    </center>
-  HTML;
+
+$router->get('/',function ()
+{
+    return view('index');
+});
+$router->get('/about',function ()
+{
+    return view('about');
 });
 
-$router->get('/blog', function($request) {
-    $blog = new BlogPost(new Author);
-    return $blog->getHtml();
+$router->get('/blogs', function($request) {
+  return (new BlogPost(new Connection))->getHtmlList();
 });
 
-$router->get('/api/blog', function($request) {
-  $blog = new BlogPost(new Author);
-  return $blog->getJson();
+$router->get('/api/blogs', function($request) {
+  return (new BlogPost(new Connection))->getJsonList();
 });
 
 $router->get('/send-mail',function($request) {
-  $mailer = new MailerService(new DatabaseLogger);
-  return $mailer->sendEmail();
-});
-
-$router->get('/get-price',function($request) {
-    $fuelPrice = new FuelPrice;
-    return $fuelPrice->getFuelPrice(new PetrolCar);
-
-    //Other examples
-    // return $fuelPrice->getFuelPrice(new CngCar);
-    // return $fuelPrice->getFuelPrice(new DieselCar);
-});
-$router->get('/get-invoice',function($request) {
-  $data = new Invoice;
-  return $data->getPDF();
-});
-
-$router->get('/get-credit-note',function($request) {
-  $data = new CreditNote;
-  return $data->getCSV();
+    $mailer = (new MailerService(new Logger))->sendEmail();
+    $message = $mailer ? 'Mail Sent!' : 'There are some problem. Please try after some time';
+    $_SESSION['success'] = $message;
+    redirect('blogs');
 });
 
 $router->get('/play-video',function($request) {
-    $player = new VideoPlayer;
-    return $player->play('video.mp4');
+    return (new OGGVideoPlayer)->play('video.mp4');
+    //Other Examples
+    // return (new OGGVideoPlayer)->play('video.avi');
+    // return (new VideoPlayer)->play('video.avi');
 });
 
-$router->get('/play-avi-video',function($request) {
-  $player = new AviVideoPlayer;
+$router->get('/subscriptions',function($request) {
+  return view('blog/subscription');
+});
 
-  // return $player->play('video.avi');
-
-  //Throw Error => mp4 doesn't support
-  return $player->play('video.mp4');
+$router->get('/get-price',function($request) {
+    $subscriptionPrice = new SubscriptionPrice;
+    $package = request('plan');
+    $package = "App\\Assignment\\{$package}";
+    $price = $subscriptionPrice->getSubscriptionPrice(new $package);
+    $_SESSION['success'] = "Subscription Price for ".request('plan')." plan is $price.";
+    redirect('subscriptions');
 });
 
 

@@ -5,6 +5,6 @@ class VideoPlayer
 {
     public function play($file)
     {
-        return "video playing";
+        return view('blog/video');
     }
 }

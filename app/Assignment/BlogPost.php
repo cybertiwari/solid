@@ -2,45 +2,34 @@
 namespace App\Assignment;
 
 use App\Assignment\Model\Author;
+use App\Assignment\Database\Connection;
 
 class BlogPost
 {
-    private $author;
-    private $title;
-    private $content;
-    protected \DateTime $date;
+    protected $connection;
 
     public function __construct(
-        Author $author
+        Connection $connection
     ) {
-        $this->author = $author;
-        $this->title = "Test Title";
-        $this->content = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, vero.";
+        $this->connection = $connection->getConnection();
     }
 
-    public function getData(): array
+    public function getAll()
     {
-        return [
-            'author' => $this->author->fullName(),
-            'title' => $this->title,
-            'content' => $this->content,
-        ];
+        return file_get_contents($this->connection);
     }
 
-    public function getJson()
+    public function getJsonList()
     {
-        return json_encode($this->getData());
+        return $this->getAll();
     }
 
-    public function getHtml()
+    public function getHtmlList()
     {
-        return "<article>
-                    <h1>".$this->title."</h1>
-                    <article>
-                        <p>".$this->author->fullName()."</p>
-                        <p>".$this->content."</p>
-                    </article>
-                </article>";
+        $blogs = json_decode($this->getAll(),true);
+        return view('blog/index',[
+            'blogs' => $blogs
+        ]);
     }
 }
 

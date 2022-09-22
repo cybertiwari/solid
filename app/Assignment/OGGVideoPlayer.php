@@ -3,13 +3,13 @@ namespace App\Assignment;
 
 use App\Assignment\VideoPlayer;
 
-class AviVideoPlayer extends VideoPlayer
+class OGGVideoPlayer extends VideoPlayer
 {
     public function play($file)
     {
-        if (pathinfo($file, PATHINFO_EXTENSION) !== 'avi') {
+        if (pathinfo($file, PATHINFO_EXTENSION) !== 'mp4') {
             throw new \Exception('Extension does not support');
         }
-        return 'video is playing';
+        return view('blog/video');
     }
 }

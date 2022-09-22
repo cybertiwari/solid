@@ -1,7 +1,7 @@
 <?php
 namespace App\Assignment;
 
-class DatabaseLogger
+class Logger
 {
     public function logError(string $message)
     {

@@ -1,9 +1,9 @@
 <?php
 namespace App\Assignment;
 
-class DieselCar
+class Silver
 {
-    public function getDieselPrice()
+    public function getSilverPrice()
     {
         return '80Rs';
     }

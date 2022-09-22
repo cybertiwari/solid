@@ -1,13 +1,13 @@
 <?php
 namespace App\Assignment;
 
-use App\Assignment\DatabaseLogger;
+use App\Assignment\Logger;
 
 class MailerService
 {
     private $logger;
 
-    public function __construct(DatabaseLogger $logger)
+    public function __construct(Logger $logger)
     {
         $this->logger = $logger;
     }
@@ -16,9 +16,10 @@ class MailerService
     {
         try {
             // send email logic here
-            return 'Mail Sent!';
+            return true;
         } catch (\Exception $exception) {
             $this->logger->logError($exception->getMessage());
+            return false;
         }
     }
 }
